@@ -9,7 +9,10 @@
  ******************************************************************************/
 
 import edu.princeton.cs.algs4.StdDraw;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdRandom;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
@@ -108,15 +111,13 @@ public class Point implements Comparable<Point> {
      */
     public Comparator<Point> slopeOrder() {
         /* YOUR CODE HERE */
-        Point localThis = this;
-        return new Comparator<Point>() {
-            public int compare(Point p1, Point p2) {
-                double slope1 = localThis.slopeTo(p1);
-                double slope2 = localThis.slopeTo(p2);
-                if (slope1 < slope2) return -1;
-                if (slope1 == slope2) return 0;
-                return 1;
-            }
+        Point self = this;
+        return (p1, p2) -> {
+            double s1 = self.slopeTo(p1);
+            double s2 = self.slopeTo(p2);
+            if (s1 < s2) return -1;
+            if (s1 == s2) return 0;
+            return 1;
         };
     }
 
@@ -138,25 +139,25 @@ public class Point implements Comparable<Point> {
      */
     public static void main(String[] args) {
         /* YOUR CODE HERE */
-        // Point[] points = new Point[10];
-        //
-        // for (int i = 0; i < points.length; i++) {
-        //     points[i] = new Point(StdRandom.uniform(100), StdRandom.uniform(100));
-        // }
-        //
-        // StdOut.println("========= before sort ==========");
-        // for (int i = 0; i < points.length; i++) {
-        //     StdOut.print(points[i]);
-        //     StdOut.println(points[0].slopeTo(points[i]));
-        // }
-        //
-        // Arrays.sort(points);
-        //
-        // StdOut.println("========= after sort ==========");
-        //
-        // for (int i = 0; i < points.length; i++) {
-        //     StdOut.print(points[i]);
-        //     StdOut.println(points[0].slopeTo(points[i]));
-        // }
+        Point[] points = new Point[10];
+
+        for (int i = 0; i < points.length; i++) {
+            points[i] = new Point(StdRandom.uniform(100), StdRandom.uniform(100));
+        }
+
+        StdOut.println("========= before sort ==========");
+        for (int i = 0; i < points.length; i++) {
+            StdOut.print(points[i]);
+            StdOut.println(points[0].slopeTo(points[i]));
+        }
+
+        Arrays.sort(points, points[0].slopeOrder());
+
+        StdOut.println("========= after sort ==========");
+
+        for (int i = 0; i < points.length; i++) {
+            StdOut.print(points[i]);
+            StdOut.println(points[0].slopeTo(points[i]));
+        }
     }
 }
