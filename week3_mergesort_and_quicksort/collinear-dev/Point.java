@@ -115,6 +115,7 @@ public class Point implements Comparable<Point> {
         return (p1, p2) -> {
             double s1 = self.slopeTo(p1);
             double s2 = self.slopeTo(p2);
+            // StdOut.println(self.toString() + ' ' + s1 + ' ' + s2);
             if (s1 < s2) return -1;
             if (s1 == s2) return 0;
             return 1;
