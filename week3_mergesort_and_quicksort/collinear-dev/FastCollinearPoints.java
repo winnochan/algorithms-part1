@@ -1,5 +1,4 @@
 import edu.princeton.cs.algs4.In;
-import edu.princeton.cs.algs4.SET;
 import edu.princeton.cs.algs4.StdDraw;
 import edu.princeton.cs.algs4.StdOut;
 
@@ -9,7 +8,8 @@ import java.util.Arrays;
 public class FastCollinearPoints {
     // finds all line segments containing 4 or more points
     // private SET<String> sets = new SET<String>();
-    private ArrayList<LineSegment> segs = new ArrayList<LineSegment>();
+    final private ArrayList<String> strs = new ArrayList<String>();
+    final private ArrayList<LineSegment> segs = new ArrayList<LineSegment>();
 
     public FastCollinearPoints(Point[] points) {
         if (points == null) {
@@ -25,7 +25,6 @@ public class FastCollinearPoints {
             }
         }
 
-        SET<String> set = new SET<String>();
         Point[] copy = points.clone();
         for (int i = 0; i < copy.length; i++) {
             Point base = copy[i];
@@ -52,12 +51,10 @@ public class FastCollinearPoints {
                 Arrays.sort(line);
 
                 LineSegment seg = new LineSegment(line[0], line[j - last]);
-                String str = seg.toString();
                 last = j;
-                if (set.contains(str)) continue;
-
-                set.add(str);
+                if (strs.contains(seg.toString())) continue;
                 segs.add(seg);
+                strs.add(seg.toString());
             }
         }
     }

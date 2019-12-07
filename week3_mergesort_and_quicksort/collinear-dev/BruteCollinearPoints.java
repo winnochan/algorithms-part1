@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BruteCollinearPoints {
-    private ArrayList<LineSegment> segs = new ArrayList<LineSegment>();
+    final private ArrayList<LineSegment> segs = new ArrayList<LineSegment>();
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
@@ -32,9 +32,11 @@ public class BruteCollinearPoints {
                         Point pr = points[r];
                         Point ps = points[s];
                         double pqSlope = pp.slopeTo(pq);
+                        double qrSlope = pq.slopeTo(pr);
                         double rsSlope = pr.slopeTo(ps);
-                        if (pqSlope != rsSlope) continue;
-                        this.segs.add(new LineSegment(pp, ps));
+                        if (pqSlope == qrSlope && qrSlope == rsSlope) {
+                            this.segs.add(new LineSegment(pp, ps));
+                        }
                     }
                 }
             }
