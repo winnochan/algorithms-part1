@@ -15,46 +15,74 @@ public class FastCollinearPoints {
         if (points == null) {
             throw new IllegalArgumentException();
         }
+        if (points.length < 4) {
+            throw new IllegalArgumentException();
+        }
 
         // O(n^2)
+        Point[] safe = new Point[points.length];
+        Point[] copy = new Point[points.length];
         for (int i = 0; i < points.length; i++) {
+            if (points[i] == null) {
+                throw new IllegalArgumentException();
+            }
             for (int j = i + 1; j < points.length; j++) {
+                if (points[j] == null) {
+                    throw new IllegalArgumentException();
+                }
                 if (points[i].slopeTo(points[j]) == Double.NEGATIVE_INFINITY) {
                     throw new IllegalArgumentException();
                 }
             }
+            safe[i] = points[i];
+            copy[i] = points[i];
         }
 
-        Point[] copy = points.clone();
+        points = safe;
         for (int i = 0; i < copy.length; i++) {
             Point base = copy[i];
             Arrays.sort(points, base.slopeOrder());
 
-            // StdOut.println("====================");
-            int last = 1;
-            for (int j = 2; j < points.length; j++) {
-                // StdOut.print(base.slopeTo(points[j - 1]) + " ");
-                // StdOut.println(base.slopeTo(points[j]));
-                if (base.slopeTo(points[j]) == base.slopeTo(points[j - 1])) {
+            int left = 1, right = 2;
+            for (; right < points.length; right++) {
+                if (base.slopeTo(points[right]) == base.slopeTo(points[right - 1])) {
                     continue;
                 }
-                if (j - last < 3) {
-                    last = j;
+                if (right - left < 3) {
+                    left = right;
                     continue;
                 }
 
-                Point[] line = new Point[j - last + 1];
+                Point[] line = new Point[right - left + 1];
                 line[0] = base;
-                for (int k = last; k < j; k++) {
-                    line[k - last + 1] = points[k];
+                for (int k = left; k < right; k++) {
+                    line[k - left + 1] = points[k];
                 }
                 Arrays.sort(line);
 
-                LineSegment seg = new LineSegment(line[0], line[j - last]);
-                last = j;
-                if (strs.contains(seg.toString())) continue;
-                segs.add(seg);
-                strs.add(seg.toString());
+                LineSegment seg = new LineSegment(line[0], line[right - left]);
+                // StdOut.println(seg.toString());
+                left = right;
+                if (!strs.contains(seg.toString())) {
+                    segs.add(seg);
+                    strs.add(seg.toString());
+                }
+            }
+            if (right - left >= 3) {
+                Point[] line = new Point[right - left + 1];
+                line[0] = base;
+                for (int k = left; k < right; k++) {
+                    line[k - left + 1] = points[k];
+                }
+                Arrays.sort(line);
+
+                LineSegment seg = new LineSegment(line[0], line[right - left]);
+                // StdOut.println(seg.toString());
+                left = right;
+                if (!strs.contains(seg.toString())) {
+                    segs.add(seg);
+                    strs.add(seg.toString());
+                }
             }
         }
     }

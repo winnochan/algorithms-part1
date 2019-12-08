@@ -13,14 +13,24 @@ public class BruteCollinearPoints {
         if (points == null) {
             throw new IllegalArgumentException();
         }
+        if (points.length < 4) {
+            throw new IllegalArgumentException();
+        }
         for (int i = 0; i < points.length; i++) {
+            if (points[i] == null) {
+                throw new IllegalArgumentException();
+            }
             for (int j = i + 1; j < points.length; j++) {
+                if (points[j] == null) {
+                    throw new IllegalArgumentException();
+                }
                 if (points[i].slopeTo(points[j]) == Double.NEGATIVE_INFINITY) {
                     throw new IllegalArgumentException();
                 }
             }
         }
 
+        points = points.clone();
         Arrays.sort(points);
 
         for (int p = 0; p < points.length - 3; p++) {
